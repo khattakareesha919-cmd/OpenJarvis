@@ -1,4 +1,4 @@
-"""``jarvis ask`` — send a query to the assistant."""
+"""``aston ask`` — send a query to the assistant."""
 
 from __future__ import annotations
 
@@ -65,7 +65,7 @@ def _run_research(
     """Run the hybrid-search research loop and print the result to the console.
 
     Lazy imports keep the cost of this branch off the cold-path of plain
-    ``jarvis ask`` calls.
+    ``aston ask`` calls.
     """
     import re
 
@@ -118,7 +118,7 @@ def _run_research(
 
     # ---- Output styling --------------------------------------------------
     # Two consoles by design: traces and the timing footer go to stderr
-    # (so ``jarvis ask --research "..." > out.md`` still gives a clean
+    # (so ``aston ask --research "..." > out.md`` still gives a clean
     # markdown file), while the rendered synthesis goes to stdout. The
     # ``markdown.code`` theme override is the cyan-citation hack — see
     # ``_style_citations`` below.
@@ -834,7 +834,7 @@ def ask(
     # passed. Pass `--agent ""` to opt out and use direct-to-engine mode.
     # Without this fallback, `[agent].default_system_prompt` and the
     # SOUL.md / MEMORY.md / USER.md persona system are silently bypassed for
-    # the most common command (`jarvis ask "..."`).
+    # the most common command (`aston ask "..."`).
     agent_explicitly_set = agent_name is not None
     if agent_name is None:
         configured_default = (config.agent.default_agent or "").strip()
@@ -909,7 +909,7 @@ def ask(
             "  [cyan]llama-server -m <gguf>[/cyan] — start llama.cpp\n\n"
             "Or set OPENAI_API_KEY / ANTHROPIC_API_KEY for cloud inference.\n\n"
             "[dim]To use a remote engine:[/dim]\n"
-            "  [cyan]jarvis config set engine.ollama.host http://<remote-ip>:11434[/cyan]\n"
+            "  [cyan]aston config set engine.ollama.host http://<remote-ip>:11434[/cyan]\n"
             "  [dim]or[/dim] [cyan]export OLLAMA_HOST=http://<remote-ip>:11434[/cyan]"
         )
         sys.exit(1)

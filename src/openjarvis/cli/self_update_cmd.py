@@ -1,4 +1,4 @@
-"""`jarvis self-update` — upgrade OpenJarvis to the latest release.
+"""`aston self-update` — upgrade OpenJarvis to the latest release.
 
 Runs the right upgrade command for how the user installed OpenJarvis:
 
@@ -163,4 +163,4 @@ def self_update(check: bool, yes: bool) -> None:
         )
         sys.exit(returncode)
 
-    click.echo("\nUpgrade complete. Re-run `jarvis --version` to confirm.")
+    click.echo("\nUpgrade complete. Re-run `aston --version` to confirm.")

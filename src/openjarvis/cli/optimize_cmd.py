@@ -1,4 +1,4 @@
-"""``jarvis optimize`` — LLM-driven configuration optimization CLI."""
+"""``aston optimize`` — LLM-driven configuration optimization CLI."""
 
 from __future__ import annotations
 

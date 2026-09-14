@@ -135,7 +135,7 @@ def _do_check() -> None:
 
             cmd = detect_install().upgrade_command
             alternative = (
-                "" if cmd == "jarvis self-update" else "Or run: jarvis self-update\n"
+                "" if cmd == "aston self-update" else "Or run: aston self-update\n"
             )
             sys.stderr.write(
                 f"\033[33mA new version of OpenJarvis is available "

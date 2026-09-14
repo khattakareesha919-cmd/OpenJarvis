@@ -1,4 +1,4 @@
-"""``jarvis init`` — detect hardware, generate config, write to disk."""
+"""``aston init`` — detect hardware, generate config, write to disk."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ from openjarvis.core.config import (
     recommend_model,
 )
 
-# Engines supported by ``jarvis init --engine``.
+# Engines supported by ``aston init --engine``.
 _SUPPORTED_ENGINES = [
     "ollama",
     "vllm",
@@ -81,9 +81,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             f"     ollama pull {pull_model}\n"
             "\n"
             "  3. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "vllm": (
             "Next steps:\n"
@@ -93,9 +93,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     vllm serve Qwen/Qwen3-4B\n"
             "\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "llamacpp": (
             "Next steps:\n"
@@ -105,9 +105,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     llama-server -m path/to/model.gguf\n"
             "\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "sglang": (
             "Next steps:\n"
@@ -117,9 +117,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     python -m sglang.launch_server --model-path Qwen/Qwen3-8B\n"
             "\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "mlx": (
             "Next steps:\n"
@@ -129,9 +129,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     mlx_lm.server --model mlx-community/Qwen2.5-7B-4bit\n"
             "\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "lmstudio": (
             "Next steps:\n"
@@ -142,9 +142,9 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "  2. Load a model and start the local server (port 1234)\n"
             "\n"
             "  3. Try it out:\n"
-            '     jarvis ask "Hello"\n'
+            '     aston ask "Hello"\n'
             "\n"
-            "  Run `jarvis doctor` to verify your setup."
+            "  Run `aston doctor` to verify your setup."
         ),
         "exo": (
             "Next steps:\n\n"
@@ -152,8 +152,8 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     pip install exo\n"
             "     exo\n\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n\n'
-            "  Run `jarvis doctor` to verify your setup."
+            '     aston ask "Hello"\n\n'
+            "  Run `aston doctor` to verify your setup."
         ),
         "nexa": (
             "Next steps:\n\n"
@@ -161,8 +161,8 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     pip install nexaai\n"
             "     nexa server\n\n"
             "  2. Try it out:\n"
-            '     jarvis ask "Hello"\n\n'
-            "  Run `jarvis doctor` to verify your setup."
+            '     aston ask "Hello"\n\n'
+            "  Run `aston doctor` to verify your setup."
         ),
         "lemonade": (
             "Next steps:\n\n"
@@ -170,8 +170,8 @@ def _next_steps_text(engine: str, model: str = "") -> str:
             "     https://lemonade-server.ai/\n\n"
             "  2. Start the Lemonade server\n\n"
             "  3. Try it out:\n"
-            '     jarvis ask "Hello"\n\n'
-            "  Run `jarvis doctor` to verify your setup."
+            '     aston ask "Hello"\n\n'
+            "  Run `aston doctor` to verify your setup."
         ),
     }
     return steps.get(engine, steps["ollama"])
@@ -191,7 +191,7 @@ def _quick_privacy_check(console: Console) -> None:
             elif r.status == "fail":
                 console.print(f"  [red]\u2717[/red] {r.message}")
     console.print()
-    console.print("  Run [cyan]jarvis scan[/cyan] for a full environment audit.")
+    console.print("  Run [cyan]aston scan[/cyan] for a full environment audit.")
 
 
 def _do_download(engine: str, model: str, spec, console: Console) -> None:
@@ -362,7 +362,7 @@ def init(
         if preset:
             console.print(
                 "Switching presets replaces the existing config. Re-run with "
-                f"[bold]jarvis init --preset {preset} --force[/bold] to confirm."
+                f"[bold]aston init --preset {preset} --force[/bold] to confirm."
             )
         else:
             console.print("Use [bold]--force[/bold] to overwrite.")
@@ -397,7 +397,7 @@ def init(
         _seed_memory_files()
         console.print(
             "\n  Edit the config to customize, then run "
-            "[bold]jarvis doctor[/bold] to verify."
+            "[bold]aston doctor[/bold] to verify."
         )
         return
 
@@ -544,8 +544,8 @@ sources = ["hackernews", "news_rss"]
         toml_content = target.read_text(encoding="utf-8")
         console.print(
             "[green]Morning Digest config added.[/green] "
-            "Run [bold]jarvis connect gdrive[/bold] to connect "
-            "Google services, then [bold]jarvis digest --fresh[/bold]."
+            "Run [bold]aston connect gdrive[/bold] to connect "
+            "Google services, then [bold]aston digest --fresh[/bold]."
         )
 
     console.print("[green]Config written successfully.[/green]")
@@ -578,7 +578,7 @@ sources = ["hackernews", "news_rss"]
             else:
                 console.print(
                     f"\n  Skipped. Download later with:\n"
-                    f"    [bold]jarvis model pull {model}[/bold]"
+                    f"    [bold]aston model pull {model}[/bold]"
                 )
 
     if not skip_scan:

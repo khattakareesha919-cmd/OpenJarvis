@@ -1,5 +1,5 @@
 """Detect how OpenJarvis was installed so we can show the right upgrade
-command (and run the right upgrade command for ``jarvis self-update``).
+command (and run the right upgrade command for ``aston self-update``).
 
 Three install paths are supported today:
 
@@ -10,7 +10,7 @@ Three install paths are supported today:
   ``uv tool upgrade openjarvis``.
 - **Editable git checkout** (``uv sync`` / ``pip install -e .`` from a
   cloned repo). The package's ``__file__`` is inside a working tree
-  with a ``.git`` directory at the repo root. ``jarvis self-update`` repairs
+  with a ``.git`` directory at the repo root. ``aston self-update`` repairs
   shallow Git history, fast-forwards the checkout, and rebuilds package metadata
   in the running environment without removing extras.
 
@@ -69,7 +69,7 @@ def detect_install() -> InstallInfo:
         if (candidate / ".git").exists() and (candidate / "pyproject.toml").exists():
             return InstallInfo(
                 kind="editable-git",
-                upgrade_command="jarvis self-update",
+                upgrade_command="aston self-update",
                 repo_root=candidate,
             )
         if candidate.parent == candidate:

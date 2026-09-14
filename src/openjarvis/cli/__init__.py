@@ -63,10 +63,10 @@ def cli(ctx: click.Context, verbose: bool, quiet: bool, pick_model_bare: bool) -
     setup_logging(verbose=verbose, quiet=quiet)
 
     # Check for updates on interactive commands. The banner is noise in
-    # demo recordings of ``jarvis ask --research``, so skip it whenever
+    # demo recordings of ``aston ask --research``, so skip it whenever
     # the research flag is in argv (cheap argv sniff — Click hasn't
     # parsed the subcommand's args yet at this point). Also skip
-    # ``jarvis scan --data-boundaries`` because it is intended to be a
+    # ``aston scan --data-boundaries`` because it is intended to be a
     # local application-data diagnostic with no outbound calls.
     import sys
 
@@ -78,7 +78,7 @@ def cli(ctx: click.Context, verbose: bool, quiet: bool, pick_model_bare: bool) -
 
         # Run the PyPI version poll off the hot path: on a cache miss it does
         # a blocking urlopen (up to 3s) that otherwise delays every command,
-        # notably `jarvis serve` startup (#263). It's best-effort and never
+        # notably `aston serve` startup (#263). It's best-effort and never
         # raises, and the nudge prints to stderr, so a daemon thread is safe —
         # for long-lived commands (serve) it finishes; for short commands that
         # exit first, the check is simply skipped this run (same as a miss).

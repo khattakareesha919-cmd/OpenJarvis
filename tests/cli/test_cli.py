@@ -192,7 +192,7 @@ class TestCLI:
             )
 
         assert rejected.exit_code != 0
-        assert "jarvis init --preset chat-simple --force" in " ".join(
+        assert "aston init --preset chat-simple --force" in " ".join(
             rejected.output.split()
         )
         assert confirmed.exit_code == 0

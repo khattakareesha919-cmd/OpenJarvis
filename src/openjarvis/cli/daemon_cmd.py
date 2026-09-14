@@ -1,4 +1,4 @@
-"""``jarvis start|stop|restart|status`` — daemon management commands."""
+"""``aston start|stop|restart|status`` — daemon management commands."""
 
 from __future__ import annotations
 
@@ -149,10 +149,10 @@ def _server_url(host: str, port: int) -> str:
 
 
 def record_server_state(pid: int, host: str, port: int) -> None:
-    """Register a running server so `jarvis status` can find it.
+    """Register a running server so `aston status` can find it.
 
-    Called by `jarvis serve` itself, so a server supervised by launchd/systemd
-    (which never goes through `jarvis start`) is still reported as running.
+    Called by `aston serve` itself, so a server supervised by launchd/systemd
+    (which never goes through `aston start`) is still reported as running.
     """
     _write_pid(pid, host, port)
 
@@ -187,14 +187,14 @@ def start(
     existing = _read_pid()
     if existing is not None:
         console.print(f"[yellow]Server already running (PID {existing}).[/yellow]")
-        console.print("Use 'jarvis stop' to stop it first, or 'jarvis restart'.")
+        console.print("Use 'aston stop' to stop it first, or 'aston restart'.")
         sys.exit(1)
 
     config = load_config()
     bind_host = host or config.server.host
     bind_port = port if port is not None else config.server.port
 
-    # Build command to run jarvis serve
+    # Build command to run aston serve
     cmd = [sys.executable, "-m", "openjarvis.cli", "serve"]
     if host:
         cmd.extend(["--host", host])

@@ -40,10 +40,14 @@ enabled = [
 
 [server]
 # Loopback only. Change to "0.0.0.0" to reach it from a phone or tablet on the
-# same network, but generate a key first with `aston auth generate-key`:
+# same network, but generate a key first with `aston auth create-key`:
 # binding to the network without one is refused, and rightly so.
 host = "127.0.0.1"
 port = 8000
+# A browser calling this server from a different address (a web app on your
+# phone, say) needs its exact origin allowed here, or the browser blocks the
+# request before it ever reaches this machine.
+# cors_origins = ["https://your-app.vercel.app"]
 
 [digest]
 enabled = true

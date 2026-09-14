@@ -1,0 +1,67 @@
+# Aston — a local assistant with a morning briefing
+#
+# Everything here runs on this machine. No API key, no account, no per-message
+# cost, and nothing said to it leaves the room. That is the whole point of
+# running it locally rather than through somebody's service.
+#
+# Install:
+#   jarvis init --preset aston --force
+#   jarvis doctor          # checks the model is present and the machine can run it
+#   jarvis                 # start talking
+#
+# The briefing:
+#   jarvis digest --text-only    # read it on screen
+#   jarvis digest                # have it read aloud (needs a TTS backend)
+
+[engine]
+default = "ollama"
+
+[intelligence]
+# Sized for a laptop with a discrete graphics card. If replies are slow, or
+# jarvis doctor complains about memory, drop to the 4b: it is noticeably less
+# capable but runs comfortably on almost anything.
+default_model = "qwen3.5:9b"
+# default_model = "qwen3.5:4b"
+
+[agent]
+# The orchestrator can use tools. "simple" is conversation only.
+default_agent = "orchestrator"
+max_turns = 8
+
+[tools]
+enabled = [
+    "web_search",
+    "get_weather",
+    "calculator",
+    "think",
+    "file_read",
+    "digest_collect",
+]
+
+[server]
+# Loopback only. Change to "0.0.0.0" to reach it from a phone or tablet on the
+# same network, but generate a key first with `jarvis auth generate-key`:
+# binding to the network without one is refused, and rightly so.
+host = "127.0.0.1"
+port = 8000
+
+[digest]
+enabled = true
+persona = "aston"
+honorific = "ma'am"
+sections = ["world"]
+
+# Where the headlines come from. Configure the feeds themselves with
+# `jarvis connect news-rss`, or edit ~/.openjarvis/connectors/news_rss.json
+# directly. Hacker News needs no setup.
+#
+# Weather is the one exception: it goes through OpenWeatherMap, which wants a
+# free API key. Without one the source errors and the briefing passes over it
+# without comment. To turn it on, set OPENWEATHER_API_KEY and fill in the
+# location below. To leave it off, drop "weather" from the sources list.
+[digest.world]
+sources = ["weather", "news_rss", "hackernews"]
+
+[tools.weather]
+default_location = ""    # e.g. "Toronto, CA"
+units = "metric"

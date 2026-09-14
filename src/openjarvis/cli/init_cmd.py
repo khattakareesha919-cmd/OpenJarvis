@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -12,7 +13,7 @@ from rich.markup import escape
 from rich.panel import Panel
 
 from openjarvis.cli._banner import print_banner
-from openjarvis.cli._bootstrap import detect_cloud_keys
+from openjarvis.cli._bootstrap import _seed_memory_files, detect_cloud_keys
 from openjarvis.cli.model import find_model_spec, hf_download, ollama_pull
 from openjarvis.cli.scan_cmd import PrivacyScanner
 from openjarvis.core.config import (
@@ -224,6 +225,41 @@ def _do_download(engine: str, model: str, spec, console: Console) -> None:
         console.print(f"  Download {model} through the {engine} interface.")
 
 
+def _bundled_configs_dir() -> Path:
+    """Locate the bundled ``configs/openjarvis`` tree.
+
+    A source checkout and an installed package nest this file at different
+    depths, so try both before settling.
+    """
+    here = Path(__file__).resolve()
+    for depth in (2, 3):
+        candidate = here.parents[depth] / "configs" / "openjarvis"
+        if candidate.exists():
+            return candidate
+    return here.parents[2] / "configs" / "openjarvis"
+
+
+def _install_persona(persona_name: str, console: Console) -> None:
+    """Copy a persona prompt file into the config directory.
+
+    A config naming a persona is half a config without the file it names.
+    The lookup falls back to a repo-relative path, so a config installed
+    anywhere else loses its voice and says nothing about it.
+    """
+    source = _bundled_configs_dir() / "prompts" / "personas" / f"{persona_name}.md"
+    if not source.exists():
+        console.print(
+            f"[yellow]Config names persona '{persona_name}', but no such "
+            f"file was found at {source}.[/yellow]"
+        )
+        return
+    target_dir = DEFAULT_CONFIG_DIR / "prompts" / "personas"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / f"{persona_name}.md"
+    target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+    console.print(f"[green]Persona '{persona_name}' installed to {target}[/green]")
+
+
 @click.command()
 @click.option(
     "--force", is_flag=True, help="Overwrite existing config without prompting."
@@ -278,6 +314,7 @@ def _do_download(engine: str, model: str, spec, console: Console) -> None:
             "code-assistant",
             "scheduled-monitor",
             "chat-simple",
+            "aston",
         ],
         case_sensitive=False,
     ),
@@ -333,29 +370,30 @@ def init(
 
     # Handle --preset: copy a starter config and return early
     if preset:
-        examples_dir = (
-            Path(__file__).resolve().parents[2] / "configs" / "openjarvis" / "examples"
-        )
-        # Also check installed package location
-        if not examples_dir.exists():
-            examples_dir = (
-                Path(__file__).resolve().parents[3]
-                / "configs"
-                / "openjarvis"
-                / "examples"
-            )
+        examples_dir = _bundled_configs_dir() / "examples"
         preset_path = examples_dir / f"{preset}.toml"
         if not preset_path.exists():
             console.print(f"[red]Preset '{preset}' not found.[/red]")
             console.print(f"  Looked in: {examples_dir}")
             raise SystemExit(1)
         DEFAULT_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-        DEFAULT_CONFIG_PATH.write_text(
-            preset_path.read_text(encoding="utf-8"), encoding="utf-8"
-        )
+        preset_text = preset_path.read_text(encoding="utf-8")
+        DEFAULT_CONFIG_PATH.write_text(preset_text, encoding="utf-8")
         console.print(
             f"[green]Preset '{preset}' installed to {DEFAULT_CONFIG_PATH}[/green]"
         )
+
+        # A preset naming a persona needs that persona file alongside it.
+        persona_match = re.search(
+            r"^\s*persona\s*=\s*[\"']([\w-]+)[\"']", preset_text, re.MULTILINE
+        )
+        if persona_match:
+            _install_persona(persona_match.group(1), console)
+
+        # This branch returns early, before the memory files further down get
+        # written. Seed them here too: without SOUL.md the chat falls back to
+        # a stock introduction that has nothing to do with the preset.
+        _seed_memory_files()
         console.print(
             "\n  Edit the config to customize, then run "
             "[bold]jarvis doctor[/bold] to verify."
@@ -480,8 +518,8 @@ def init(
 enabled = true
 schedule = "0 7 * * *"
 timezone = "America/Los_Angeles"
-persona = "jarvis"
-honorific = "sir"
+persona = "aston"
+honorific = "ma'am"
 tts_backend = "cartesia"
 voice_id = "c8f7835e-28a3-4f0c-80d7-c1302ac62aae"
 voice_speed = 1.2
@@ -503,6 +541,7 @@ sources = ["hackernews", "news_rss"]
         existing = target.read_text(encoding="utf-8")
         target.write_text(existing + digest_section, encoding="utf-8")
         toml_content = target.read_text(encoding="utf-8")
+        _install_persona("aston", console)
         console.print(
             "[green]Morning Digest config added.[/green] "
             "Run [bold]jarvis connect gdrive[/bold] to connect "
@@ -512,23 +551,7 @@ sources = ["hackernews", "news_rss"]
     console.print("[green]Config written successfully.[/green]")
 
     # Create default memory files (skip if they already exist)
-    soul_path = DEFAULT_CONFIG_DIR / "SOUL.md"
-    if not soul_path.exists():
-        soul_path.write_text(
-            "# Agent Persona\n\nYou are Jarvis, a helpful personal AI assistant.\n",
-            encoding="utf-8",
-        )
-
-    memory_path = DEFAULT_CONFIG_DIR / "MEMORY.md"
-    if not memory_path.exists():
-        memory_path.write_text("# Agent Memory\n\n", encoding="utf-8")
-
-    user_path = DEFAULT_CONFIG_DIR / "USER.md"
-    if not user_path.exists():
-        user_path.write_text("# User Profile\n\n", encoding="utf-8")
-
-    skills_dir = DEFAULT_CONFIG_DIR / "skills"
-    skills_dir.mkdir(exist_ok=True)
+    _seed_memory_files()
 
     selected_engine = engine or recommend_engine(hw)
     model = recommend_model(hw, selected_engine)

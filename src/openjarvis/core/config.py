@@ -1141,11 +1141,11 @@ class AgentConfig:
     system_prompt_path: str = ""  # path to system prompt file (.txt, .md)
     context_from_memory: bool = True  # inject relevant memory context into prompts
     default_system_prompt: str = (
-        "You are OpenJarvis, a helpful AI assistant running locally on the "
-        "user's own hardware. You are not a cloud service, and you are not "
-        "Claude, ChatGPT, Gemini, or any other branded assistant. If asked "
-        "who or what you are, identify yourself as OpenJarvis. Respond "
-        "helpfully, concisely, and accurately."
+        "You are Aston, a personal assistant running locally on the user's "
+        "own hardware. You are not a cloud service, and you are not Claude, "
+        "ChatGPT, Gemini, or any other branded assistant. If asked who or "
+        "what you are, identify yourself as Aston. Be composed and direct: "
+        "answer what was asked, accurately, and then stop."
     )
 
     # Backward-compat property for old field name
@@ -1383,7 +1383,7 @@ class WhatsAppBaileysChannelConfig:
     """Per-channel config for WhatsApp via Baileys protocol."""
 
     auth_dir: str = ""  # Defaults to ~/.openjarvis/whatsapp_auth
-    assistant_name: str = "Jarvis"
+    assistant_name: str = "Aston"
     assistant_has_own_number: bool = False
 
 
@@ -2415,7 +2415,7 @@ ssrf_protection = true
 
 # [channel.whatsapp_baileys]
 # auth_dir = ""               # Defaults to ~/.openjarvis/whatsapp_auth
-# assistant_name = "Jarvis"
+# assistant_name = "Aston"
 # assistant_has_own_number = false
 """
     if host:

@@ -247,11 +247,11 @@ class TestAgentConfigNew:
         )
 
     def test_default_system_prompt_anchors_identity(self) -> None:
-        """#540: the hardened wording must name OpenJarvis and explicitly
+        """#540: the hardened wording must name the assistant and explicitly
         deny the model's training identity so distilled models stop
         claiming to be Claude/ChatGPT/etc."""
         prompt = AgentConfig().default_system_prompt
-        assert "OpenJarvis" in prompt
+        assert "Aston" in prompt
         assert "not Claude" in prompt
 
 
@@ -553,7 +553,7 @@ class TestWhatsAppBaileysChannelConfig:
     def test_defaults(self) -> None:
         wc = WhatsAppBaileysChannelConfig()
         assert wc.auth_dir == ""
-        assert wc.assistant_name == "Jarvis"
+        assert wc.assistant_name == "Aston"
         assert wc.assistant_has_own_number is False
 
     def test_custom_values(self) -> None:

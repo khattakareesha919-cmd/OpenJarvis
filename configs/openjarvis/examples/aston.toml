@@ -51,6 +51,16 @@ persona = "aston"
 honorific = "ma'am"
 sections = ["world"]
 
+# The voice. Kokoro runs on this machine, so the briefing is never sent
+# anywhere to be spoken. bm_george is its British male voice; bm_lewis is the
+# other one, a little lighter. bf_emma and bf_isabella are the British women.
+#
+# Needs `uv sync --extra voice`, plus espeak-ng on PATH for words outside
+# Kokoro's dictionary. Without those, `jarvis digest --text-only` still works.
+tts_backend = "kokoro"
+voice_id = "bm_george"
+voice_speed = 0.95     # a touch under natural pace; a butler does not gabble
+
 # Where the headlines come from. Configure the feeds themselves with
 # `jarvis connect news-rss`, or edit ~/.openjarvis/connectors/news_rss.json
 # directly. Hacker News needs no setup.

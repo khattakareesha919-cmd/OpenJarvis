@@ -1627,7 +1627,7 @@ class SpeechConfig:
     # (British female), af_* / am_* (American).
     tts_backend: str = "kokoro"  # "kokoro", "openai_tts", "cartesia"
     voice_id: str = "bm_george"
-    voice_speed: float = 1.0
+    voice_speed: float = 0.95  # a touch under natural pace
 
 
 @dataclass(slots=True)
@@ -1731,17 +1731,18 @@ class DigestConfig:
     enabled: bool = False
     schedule: str = "0 6 * * *"
     timezone: str = "America/Los_Angeles"
-    persona: str = "jarvis"
+    persona: str = "aston"
     sections: List[str] = field(
         default_factory=lambda: ["messages", "calendar", "health", "world"]
     )
     optional_sections: List[str] = field(
         default_factory=lambda: ["github", "financial", "music", "fitness"]
     )
-    honorific: str = "sir"
-    voice_id: str = ""
-    voice_speed: float = 1.0
-    tts_backend: str = "cartesia"
+    honorific: str = "ma'am"
+    voice_id: str = "bm_george"
+    # A touch under natural pace. A butler does not gabble.
+    voice_speed: float = 0.95
+    tts_backend: str = "kokoro"
     messages: DigestSectionConfig = field(
         default_factory=lambda: DigestSectionConfig(
             sources=["gmail", "slack", "google_tasks"]

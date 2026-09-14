@@ -387,7 +387,8 @@ def init(
         persona_match = re.search(
             r"^\s*persona\s*=\s*[\"']([\w-]+)[\"']", preset_text, re.MULTILINE
         )
-        if persona_match:
+        _install_persona("aston", console)
+        if persona_match and persona_match.group(1) != "aston":
             _install_persona(persona_match.group(1), console)
 
         # This branch returns early, before the memory files further down get
@@ -520,9 +521,9 @@ schedule = "0 7 * * *"
 timezone = "America/Los_Angeles"
 persona = "aston"
 honorific = "ma'am"
-tts_backend = "cartesia"
-voice_id = "c8f7835e-28a3-4f0c-80d7-c1302ac62aae"
-voice_speed = 1.2
+tts_backend = "kokoro"
+voice_id = "bm_george"
+voice_speed = 0.95
 sections = ["health", "messages", "calendar", "world"]
 
 [digest.health]
@@ -541,7 +542,6 @@ sources = ["hackernews", "news_rss"]
         existing = target.read_text(encoding="utf-8")
         target.write_text(existing + digest_section, encoding="utf-8")
         toml_content = target.read_text(encoding="utf-8")
-        _install_persona("aston", console)
         console.print(
             "[green]Morning Digest config added.[/green] "
             "Run [bold]jarvis connect gdrive[/bold] to connect "
@@ -552,6 +552,7 @@ sources = ["hackernews", "news_rss"]
 
     # Create default memory files (skip if they already exist)
     _seed_memory_files()
+    _install_persona("aston", console)
 
     selected_engine = engine or recommend_engine(hw)
     model = recommend_model(hw, selected_engine)

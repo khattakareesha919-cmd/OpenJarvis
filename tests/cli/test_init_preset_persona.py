@@ -47,13 +47,19 @@ class TestPresetPersona:
         # name 'jarvis' and had the same gap.
         _install("morning-digest-minimal")
 
-        assert (home / "prompts" / "personas" / "jarvis.md").exists()
+        personas = home / "prompts" / "personas"
+        assert (personas / "jarvis.md").exists()
+        # The default is installed alongside it, not instead of it.
+        assert (personas / "aston.md").exists()
 
-    def test_preset_without_a_persona_installs_none(self, home: Path) -> None:
+    def test_aston_is_installed_even_when_a_preset_names_no_persona(
+        self, home: Path
+    ) -> None:
+        # digest.persona defaults to "aston", so aston.md has to be on disk
+        # whether or not the chosen preset asked for it.
         _install("chat-simple")
 
-        personas = home / "prompts" / "personas"
-        assert not personas.exists() or not list(personas.glob("*.md"))
+        assert (home / "prompts" / "personas" / "aston.md").exists()
 
     def test_preset_seeds_the_memory_files(self, home: Path) -> None:
         # The preset branch returns early, well before the seeding the normal

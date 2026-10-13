@@ -1,4 +1,4 @@
-"""``jarvis workflow`` — workflow management commands."""
+"""``aston workflow`` — workflow management commands."""
 
 from __future__ import annotations
 

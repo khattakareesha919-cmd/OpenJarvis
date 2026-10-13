@@ -1,4 +1,4 @@
-"""``jarvis channels`` — manage messaging channels for the agent."""
+"""``aston channels`` — manage messaging channels for the agent."""
 
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def channels_status() -> None:
         table.add_row(
             "iMessage",
             "[dim]stopped[/dim]",
-            "jarvis channels imessage-start <contact>",
+            "aston channels imessage-start <contact>",
         )
 
     console.print(table)

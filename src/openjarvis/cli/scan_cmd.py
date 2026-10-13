@@ -1,4 +1,4 @@
-"""``jarvis scan`` — audit your environment for privacy and security risks."""
+"""``aston scan`` — audit your environment for privacy and security risks."""
 
 from __future__ import annotations
 

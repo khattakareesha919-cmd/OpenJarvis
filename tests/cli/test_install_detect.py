@@ -34,7 +34,7 @@ def test_editable_git_install_detected(tmp_path, monkeypatch):
 
     info = detect_install()
     assert info.kind == "editable-git"
-    assert info.upgrade_command == "jarvis self-update"
+    assert info.upgrade_command == "aston self-update"
     assert info.repo_root == repo
 
 

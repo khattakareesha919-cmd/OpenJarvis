@@ -26,7 +26,7 @@ def check_and_route(ctx: click.Context) -> None:
     """Called from the root group when no subcommand is invoked.
 
     Returns None and does nothing if a subcommand is being invoked
-    (the user typed something specific like ``jarvis ask``).
+    (the user typed something specific like ``aston ask``).
     """
     if ctx.invoked_subcommand is not None:
         return

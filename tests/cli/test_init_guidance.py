@@ -26,8 +26,8 @@ class TestInitShowsNextSteps:
             result = CliRunner().invoke(cli, ["init", "--engine", "llamacpp", _NO_DL])
         assert result.exit_code == 0
         assert "Getting Started" in result.output
-        assert "jarvis ask" in result.output
-        assert "jarvis doctor" in result.output
+        assert "aston ask" in result.output
+        assert "aston doctor" in result.output
 
     def test_init_output_shows_toml_sections_literally(self, tmp_path: Path) -> None:
         """Init output should render TOML section headers like [engine] literally."""
@@ -49,8 +49,8 @@ class TestNextStepsOllama:
         text = _next_steps_text("ollama")
         assert "ollama serve" in text
         assert "ollama pull" in text
-        assert "jarvis ask" in text
-        assert "jarvis doctor" in text
+        assert "aston ask" in text
+        assert "aston doctor" in text
 
     def test_next_steps_ollama_with_model(self) -> None:
         text = _next_steps_text("ollama", "qwen3.5:27b")
@@ -66,8 +66,8 @@ class TestNextStepsVllm:
         text = _next_steps_text("vllm")
         assert "pip install vllm" in text
         assert "vllm serve" in text
-        assert "jarvis ask" in text
-        assert "jarvis doctor" in text
+        assert "aston ask" in text
+        assert "aston doctor" in text
 
 
 class TestNextStepsLlamacpp:
@@ -75,8 +75,8 @@ class TestNextStepsLlamacpp:
         text = _next_steps_text("llamacpp")
         assert "brew install llama.cpp" in text
         assert "llama-server" in text
-        assert "jarvis ask" in text
-        assert "jarvis doctor" in text
+        assert "aston ask" in text
+        assert "aston doctor" in text
 
 
 class TestNextStepsMlx:
@@ -84,8 +84,8 @@ class TestNextStepsMlx:
         text = _next_steps_text("mlx")
         assert "pip install mlx-lm" in text
         assert "mlx_lm.server" in text
-        assert "jarvis ask" in text
-        assert "jarvis doctor" in text
+        assert "aston ask" in text
+        assert "aston doctor" in text
 
 
 class TestMinimalConfig:
@@ -105,7 +105,7 @@ class TestMinimalConfig:
         lines = [ln for ln in content.splitlines() if ln.strip()]
         assert len(lines) <= 30
         # Should have the reference hint
-        assert "jarvis init --full" in content
+        assert "aston init --full" in content
 
     def test_init_full_generates_verbose_config(self, tmp_path: Path) -> None:
         """jarvis init --full produces the full reference config."""
@@ -178,13 +178,13 @@ class TestNextStepsExoNexa:
     def test_next_steps_exo(self) -> None:
         text = _next_steps_text("exo")
         assert "exo" in text.lower()
-        assert "jarvis ask" in text
+        assert "aston ask" in text
         assert "ollama" not in text.lower()
 
     def test_next_steps_nexa(self) -> None:
         text = _next_steps_text("nexa")
         assert "nexa" in text.lower()
-        assert "jarvis ask" in text
+        assert "aston ask" in text
         assert "ollama" not in text.lower()
 
 
@@ -237,4 +237,4 @@ class TestInitPrivacyHook:
             ]
             result = CliRunner().invoke(cli, ["init", "--engine", "llamacpp", _NO_DL])
         assert result.exit_code == 0
-        assert "jarvis scan" in result.output
+        assert "aston scan" in result.output

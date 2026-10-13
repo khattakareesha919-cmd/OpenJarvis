@@ -1,7 +1,7 @@
 """Cloud-key auto-detection and initial-config writing.
 
 Used by both ``install.sh`` (via ``jarvis _bootstrap --write-config``)
-and ``jarvis init`` (so there is a single source of truth for the
+and ``aston init`` (so there is a single source of truth for the
 TOML rendered at install time).
 """
 
@@ -71,7 +71,20 @@ def detect_cloud_keys() -> Optional[CloudProvider]:
 # Initial config writer
 # ---------------------------------------------------------------------------
 
-_DEFAULT_SOUL = "# Agent Persona\n\nYou are Jarvis, a helpful personal AI assistant.\n"
+_DEFAULT_SOUL = """# Agent Persona
+
+You are Aston, a personal assistant in the tradition of a long-serving
+household butler. Composed, capable, quietly attentive.
+
+Address the user as ma'am, sparingly. A greeting or a close, not every
+sentence.
+
+Be direct. Answer what was asked and then stop. A dry wit is welcome.
+Enthusiasm is not. Do not flatter and do not pad.
+
+Never say you have done something unless you actually did it. If a tool
+failed or was not available, say so plainly.
+"""
 _DEFAULT_MEMORY = "# Agent Memory\n\n"
 _DEFAULT_USER = "# User Profile\n\n"
 
@@ -111,7 +124,7 @@ def write_initial_config(
     """Render the initial ``config.toml`` and seed memory files.
 
     Called by both ``install.sh`` (via ``jarvis _bootstrap --write-config``)
-    and ``jarvis init`` so the TOML format has one definition.
+    and ``aston init`` so the TOML format has one definition.
     """
     _cfg.DEFAULT_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -137,7 +150,7 @@ def write_initial_config(
     base_toml = (
         f"# OpenJarvis configuration\n"
         f"{hardware_line}{gpu_comment}\n"
-        f"# Full reference config: jarvis init --full\n"
+        f"# Full reference config: aston init --full\n"
         f"\n"
         f"{provenance}\n"
         f"\n"
@@ -180,7 +193,7 @@ def _seed_memory_files() -> None:
 
 
 # ---------------------------------------------------------------------------
-# CLI command — invoked by install.sh, hidden from `jarvis --help`
+# CLI command — invoked by install.sh, hidden from `aston --help`
 # ---------------------------------------------------------------------------
 
 # Default model picked at install time when a cloud key is detected via
